@@ -15,14 +15,14 @@ To download, click the arrow next to the plugin name below and save the `[plugin
 ### To configure a plugin:
 Follow the same steps above, but click the **Settings** button next to the plugin. Options are automatically saved as they are changed.
 
-# TTS Events [&#8681;](tts-events.plugin.js)
+# TTS Events [&#8681;](https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/tts-events.plugin.js)
 Plays Ventrilo-like text-to-speech messages when a user connects to voice, disconnects from voice, joins the channel, or leaves the channel. You can change the voice (only ones installed on your system), volume, speech, pitch, and the messages themselves.
 
-# AFK Auto-Deafen [&#8681;](afk-deafen.plugin.js)
+# AFK Auto-Deafen [&#8681;](https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/afk-deafen.plugin.js)
 Automatically deafens Discord when you enter an AFK channel, and undeafens when you leave one. You tell it which channel names are AFK channels.
 
-# Latency Display [&#8681;](latency.plugin.js)
+# Latency Display [&#8681;](https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/latency.plugin.js)
 Displays a live ping on the 'Connection Info' button. You can change which server is pinged, how often, and set thresholds at which to display the ping as yellow, orange, or red.
 
-# Auto-Select Server [&#8681;](auto-select-server.plugin.js)
+# Auto-Select Server [&#8681;](https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/auto-select-server.plugin.js)
 When Discord starts up, this plugin will select the server that you're speaking in automatically.
