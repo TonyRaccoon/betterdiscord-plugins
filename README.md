@@ -17,6 +17,7 @@ Follow the same steps above, but click the **Settings** button next to the plugi
 
 # TTS Events [&#8681;](https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/tts-events.plugin.js)
 Plays Ventrilo-like text-to-speech messages when a user connects to voice, disconnects from voice, joins the channel, or leaves the channel. You can change the voice (only ones installed on your system), volume, speech, pitch, and the messages themselves.
+
 **NOTE**: The plugin can only play notifications for the server you currently have selected; events in other servers will be silent.
 
 # AFK Auto-Deafen [&#8681;](https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/afk-deafen.plugin.js)
