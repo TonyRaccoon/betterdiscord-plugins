@@ -14,7 +14,7 @@ ttsEvents.prototype.onMessage        = function() {}
 ttsEvents.prototype.onSwitch         = function() {}
 ttsEvents.prototype.stop             = function() {}
 
-ttsEvents.prototype.start          = function() {
+ttsEvents.prototype.start            = function() {
 	var self = this;
 	this.userCache = [];
 	
@@ -34,6 +34,8 @@ ttsEvents.prototype.start          = function() {
 		plugin:      this,
 		storageKey:  "ttsevents-options",
 		defaults:    {
+			only_if_connected:     {value:true,                       type:"toggle", label:"Only enable if you're connected to voice"},
+			
 			message_connected:     {value:"% has connected",          type:"text",   label:"Text spoken when a user connects to voice", help:"% is replaced with the username"},
 			message_disconnected:  {value:"% has disconnected",       type:"text",   label:"Text spoken when a user disconnects from voice"},
 			message_joinedchannel: {value:"% has joined the channel", type:"text",   label:"Text spoken when a user joins the channel"},
@@ -49,7 +51,7 @@ ttsEvents.prototype.start          = function() {
 	this.options.load();
 }
 
-ttsEvents.prototype.observer       = function(e) {
+ttsEvents.prototype.observer         = function(e) {
 	var elem = e.addedNodes[0];
 	var removed = e.removedNodes[0];
 	
@@ -110,7 +112,7 @@ ttsEvents.prototype.getSettingsPanel = function() {
 	if (this.options) return this.options.settingsHTML();
 }
 
-ttsEvents.prototype.localChannel   = function() {
+ttsEvents.prototype.localChannel     = function() {
 	var localUsername = this.localUsername();
 	var localChannel = false;
 	
@@ -130,42 +132,23 @@ ttsEvents.prototype.localChannel   = function() {
 	return localChannel;
 }
 
-ttsEvents.prototype.localUsername  = function() {
+ttsEvents.prototype.localUsername    = function() {
 	return $(".account-details > .username").text();
 }
 
-ttsEvents.prototype.userJoined     = function(user, channel) {
-	if (this.getDeafened()) return;
-	var localUsername = this.localUsername();
-	if (user == localUsername) return;
-	this.speak(this.options.get("message_connected").replace("%", user));
-	this.userCache = this.getUsers();
+ttsEvents.prototype.userJoined       = function(user, channel) {
+	this.playNotification(user, channel, "connected");
 }
 
-ttsEvents.prototype.userLeft       = function(user, channel) {
-	if (this.getDeafened()) return;
-	var localUsername = this.localUsername();
-	if (user == localUsername) return;
-	this.speak(this.options.get("message_disconnected").replace("%", user));
-	this.userCache = this.getUsers();
+ttsEvents.prototype.userLeft         = function(user, channel) {
+	this.playNotification(user, channel, "disconnected");
 }
 
-ttsEvents.prototype.userMoved      = function(user, channel) {
-	if (this.getDeafened()) return;
-	var localUsername = this.localUsername();
-	var localChannel = this.localChannel();
-	var prevChannel = this.getLastChannel(user);
-	if (user == localUsername) return;
-	
-	if (localChannel == prevChannel)
-		this.speak(this.options.get("message_leftchannel").replace("%", user));
-	else if (localChannel == channel)
-		this.speak(this.options.get("message_joinedchannel").replace("%", user));
-	
-	this.userCache = this.getUsers();
+ttsEvents.prototype.userMoved        = function(user, channel) {
+	this.playNotification(user, channel,"moved")
 }
 
-ttsEvents.prototype.getUsers       = function() {
+ttsEvents.prototype.getUsers         = function() {
 	var users = [];
 	
 	$(".channel-voice-states").each(function(){
@@ -181,7 +164,7 @@ ttsEvents.prototype.getUsers       = function() {
 	return users;
 }
 
-ttsEvents.prototype.getLastChannel = function(usertofind) {
+ttsEvents.prototype.getLastChannel   = function(usertofind) {
 	var channel = false;
 	
 	$(this.userCache).each(function(){
@@ -194,7 +177,7 @@ ttsEvents.prototype.getLastChannel = function(usertofind) {
 	return channel;
 }
 
-ttsEvents.prototype.getUserChanges = function() {
+ttsEvents.prototype.getUserChanges   = function() {
 	var cachedUsers = [];
 	var currentUsers = [];
 	
@@ -221,11 +204,35 @@ ttsEvents.prototype.getUserChanges = function() {
 	return {joined:usersThatJoined, left:usersThatLeft};
 }
 
-ttsEvents.prototype.getDeafened    = function() {
+ttsEvents.prototype.getDeafened      = function() {
 	return $(".btn-deafen").first().hasClass("disabled");
 }
 
-ttsEvents.prototype.speak = function(text) {
+ttsEvents.prototype.playNotification = function(user,channel,type) {
+	var localUsername = this.localUsername();
+	var localChannel = this.localChannel();
+	var prevChannel = this.getLastChannel(user);
+	
+	if (this.getDeafened()) return;
+	if (user == localUsername) return;
+	if (!localChannel && this.options.get("only_if_connected")) return;
+	if (!localChannel && type == "moved") return;
+	
+	var key;
+	
+	if (type == "connected")              key = "message_connected";
+	else if (type == "disconnected")      key = "message_disconnected";
+	else if (type == "moved") {
+		if (localChannel == prevChannel)  key = "message_leftchannel";
+		else if (localChannel == channel) key = "message_joinedchannel";
+	}
+	
+	this.speak(this.options.get(key).replace("%", user));
+	
+	this.userCache = this.getUsers();
+}
+
+ttsEvents.prototype.speak            = function(text) {
 	var self = this;
 	var args = [];
 	
@@ -247,7 +254,7 @@ ttsEvents.prototype.speak = function(text) {
 
 // Tony's OptionsPlugin Helper /////////////////////////////////////
 // https://github.com/tony311/betterdiscord-optionshelper //////////
-ttsEvents.prototype.getOptionsPlugin  = function(){
+ttsEvents.prototype.getOptionsPlugin = function(){
 	var OptionsPlugin                      = function(params){       // Constructor
 		params.defaults = params.defaults || {};
 		
