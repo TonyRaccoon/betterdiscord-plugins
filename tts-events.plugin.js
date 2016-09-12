@@ -64,7 +64,7 @@ ttsEvents.prototype.observer         = function(e) {
 		
 		// If there's a new user, he just joined
 		if (change.joined.length > 0)
-			this.userJoined(user, channel);
+			this.userConnected(user, channel);
 		else
 			this.userMoved(user, channel);
 	}
@@ -78,7 +78,7 @@ ttsEvents.prototype.observer         = function(e) {
 		
 		// If there's a new user, he just joined
 		if (change.joined.length > 0)
-			this.userJoined(user, channel);
+			this.userConnected(user, channel);
 		else
 			this.userMoved(user, channel);
 	}
@@ -91,7 +91,7 @@ ttsEvents.prototype.observer         = function(e) {
 		if (change.left.length > 0) {
 			var leftUser = change.left[0];
 			var prevChannel = this.getLastChannel(leftUser);
-			this.userLeft(leftUser, prevChannel);
+			this.userDisconnected(leftUser, prevChannel);
 		}
 	}
 	
@@ -103,7 +103,7 @@ ttsEvents.prototype.observer         = function(e) {
 		if (change.left.length > 0) {
 			var leftUser = change.left[0];
 			var prevChannel = this.getLastChannel(leftUser);
-			this.userLeft(leftUser, prevChannel);
+			this.userDisconnected(leftUser, prevChannel);
 		}
 	}
 }
@@ -136,11 +136,11 @@ ttsEvents.prototype.localUsername    = function() {
 	return $(".account-details > .username").text();
 }
 
-ttsEvents.prototype.userJoined       = function(user, channel) {
+ttsEvents.prototype.userConnected    = function(user, channel) {
 	this.playNotification(user, channel, "connected");
 }
 
-ttsEvents.prototype.userLeft         = function(user, channel) {
+ttsEvents.prototype.userDisconnected = function(user, channel) {
 	this.playNotification(user, channel, "disconnected");
 }
 
