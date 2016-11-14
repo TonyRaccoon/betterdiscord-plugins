@@ -5,7 +5,7 @@ function afkDeafen(){}
 
 afkDeafen.prototype.getName          = function() { return "AFK Auto-Deafen"; }
 afkDeafen.prototype.getDescription   = function() { return "Automatically deafens you when moving into an AFK channel.";  }
-afkDeafen.prototype.getVersion       = function() { return "1.0.0"; }
+afkDeafen.prototype.getVersion       = function() { return "1.0.1"; }
 afkDeafen.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 afkDeafen.prototype.load             = function() {}
@@ -65,8 +65,24 @@ afkDeafen.prototype.getSettingsPanel = function() {
 
 
 
-afkDeafen.prototype.localUsername = function() {
-	return $(".account-details > .username").text();
+afkDeafen.prototype.localUsername    = function() {
+	var myAvatar = $(".account > .avatar-small").css("background-image");
+	var nick;
+	
+	$(".channel-voice-states .avatar-small").each(function(){
+		var avatar = $(this).css("background-image");
+		
+		if (avatar == myAvatar) {
+			nick = $(this).next().text();
+			return false;
+		}
+	});
+	
+	// If the above failed for some reason, fall back to using the account name
+	if (!nick)
+		return $(".account-details > .username").text();
+	
+	return nick;
 }
 
 afkDeafen.prototype.userMoved = function(user, channel) {
