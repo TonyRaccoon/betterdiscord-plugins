@@ -5,7 +5,7 @@ function ttsEvents(){}
 
 ttsEvents.prototype.getName          = function() { return "TTS Events"; }
 ttsEvents.prototype.getDescription   = function() { return "Plays text-to-speech messages on events such as users joining.";  }
-ttsEvents.prototype.getVersion       = function() { return "1.0.0"; }
+ttsEvents.prototype.getVersion       = function() { return "1.0.1"; }
 ttsEvents.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 ttsEvents.prototype.load             = function() {}
@@ -133,7 +133,23 @@ ttsEvents.prototype.localChannel     = function() {
 }
 
 ttsEvents.prototype.localUsername    = function() {
-	return $(".account-details > .username").text();
+	var myAvatar = $(".account > .avatar-small").css("background-image");
+	var nick;
+	
+	$(".channel-voice-states .avatar-small").each(function(){
+		var avatar = $(this).css("background-image");
+		
+		if (avatar == myAvatar) {
+			nick = $(this).next().text();
+			return false;
+		}
+	});
+	
+	// If the above failed for some reason, fall back to using the account name
+	if (!nick)
+		return $(".account-details > .username").text();
+	
+	return nick;
 }
 
 ttsEvents.prototype.userConnected    = function(user, channel) {
