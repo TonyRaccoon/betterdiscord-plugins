@@ -5,7 +5,7 @@ function latencyDisplay(){}
 
 latencyDisplay.prototype.getName          = function() { return "Latency Display"; }
 latencyDisplay.prototype.getDescription   = function() { return "Displays live latency on the connection info button.";  }
-latencyDisplay.prototype.getVersion       = function() { return "1.0.2"; }
+latencyDisplay.prototype.getVersion       = function() { return "1.0.3"; }
 latencyDisplay.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 latencyDisplay.prototype.load             = function() {}
@@ -189,8 +189,12 @@ latencyDisplay.prototype.getOptionsPlugin = function(){
 		
 		var self = this;
 		$.each(this.options, function(key, option){
-			if (self.options[key])
-				self.options[key].value = bdPluginStorage.get(self.storageKey, key);
+			if (self.options[key]) {
+				var value = bdPluginStorage.get(self.storageKey, key);
+				if (value !== null) {
+					self.options[key].value = value;
+				}
+			}
 		});
 	};
 	OptionsPlugin.prototype.reset          = function(){             // Reset options to defaults

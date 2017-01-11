@@ -5,7 +5,7 @@ function ttsEvents(){}
 
 ttsEvents.prototype.getName          = function() { return "TTS Events"; }
 ttsEvents.prototype.getDescription   = function() { return "Plays text-to-speech messages on events such as users joining.";  }
-ttsEvents.prototype.getVersion       = function() { return "1.0.3"; }
+ttsEvents.prototype.getVersion       = function() { return "1.0.4"; }
 ttsEvents.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 ttsEvents.prototype.load             = function() {}
@@ -356,8 +356,12 @@ ttsEvents.prototype.getOptionsPlugin = function(){
 		
 		var self = this;
 		$.each(this.options, function(key, option){
-			if (self.options[key])
-				self.options[key].value = bdPluginStorage.get(self.storageKey, key);
+			if (self.options[key]) {
+				var value = bdPluginStorage.get(self.storageKey, key);
+				if (value !== null) {
+					self.options[key].value = value;
+				}
+			}
 		});
 	};
 	OptionsPlugin.prototype.reset          = function(){             // Reset options to defaults
