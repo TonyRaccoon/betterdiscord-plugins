@@ -5,7 +5,7 @@ function latencyDisplay(){}
 
 latencyDisplay.prototype.getName          = function() { return "Latency Display"; }
 latencyDisplay.prototype.getDescription   = function() { return "Displays live latency on the connection info button.";  }
-latencyDisplay.prototype.getVersion       = function() { return "1.0.3"; }
+latencyDisplay.prototype.getVersion       = function() { return "1.0.4"; }
 latencyDisplay.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 latencyDisplay.prototype.load             = function() {}
@@ -112,7 +112,7 @@ latencyDisplay.prototype.getOptionsPlugin = function(){
 				option.min = (option.min === undefined) ? 0 : option.min;
 				option.max = (option.max === undefined) ? 100 : option.max;
 				option.step = (option.step === undefined || option.step == 0) ? 1 : option.step;
-				option.percent = (option.percent === undefined) ? true : option.percent;
+				option.percent = (option.percent === undefined) ? false : option.percent;
 			}
 		});
 		

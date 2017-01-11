@@ -5,7 +5,7 @@ function ttsEvents(){}
 
 ttsEvents.prototype.getName          = function() { return "TTS Events"; }
 ttsEvents.prototype.getDescription   = function() { return "Plays text-to-speech messages on events such as users joining.";  }
-ttsEvents.prototype.getVersion       = function() { return "1.0.4"; }
+ttsEvents.prototype.getVersion       = function() { return "1.0.5"; }
 ttsEvents.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 ttsEvents.prototype.load             = function() {}
@@ -42,9 +42,9 @@ ttsEvents.prototype.start            = function() {
 			message_leftchannel:   {value:"% has left the channel",   type:"text",   label:"Text spoken when a user leaves the channel"},
 			
 			voice_voice:           {value:"Default",                  type:"select", label:"Voice", options:voices},
-			voice_volume:          {value:100,                        type:"range",  label:"Voice volume", min:0, max:100, step:1 },
-			voice_speed:           {value:100,                        type:"range",  label:"Voice speed",  min:10, max:1000, step:10 },
-			voice_pitch:           {value:100,                        type:"range",  label:"Voice pitch",  min:0, max:200, step:1 },
+			voice_volume:          {value:100,                        type:"range",  label:"Voice volume", min:0,  max:100,  step:1,  percent:true },
+			voice_speed:           {value:100,                        type:"range",  label:"Voice speed",  min:10, max:1000, step:10, percent:true },
+			voice_pitch:           {value:100,                        type:"range",  label:"Voice pitch",  min:0,  max:200,  step:1,  percent:true },
 		}
 	});
 	
@@ -279,7 +279,7 @@ ttsEvents.prototype.getOptionsPlugin = function(){
 				option.min = (option.min === undefined) ? 0 : option.min;
 				option.max = (option.max === undefined) ? 100 : option.max;
 				option.step = (option.step === undefined || option.step == 0) ? 1 : option.step;
-				option.percent = (option.percent === undefined) ? true : option.percent;
+				option.percent = (option.percent === undefined) ? false : option.percent;
 			}
 		});
 		

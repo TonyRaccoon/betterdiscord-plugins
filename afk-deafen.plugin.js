@@ -5,7 +5,7 @@ function afkDeafen(){}
 
 afkDeafen.prototype.getName          = function() { return "AFK Auto-Deafen"; }
 afkDeafen.prototype.getDescription   = function() { return "Automatically deafens you when moving into an AFK channel.";  }
-afkDeafen.prototype.getVersion       = function() { return "1.0.4"; }
+afkDeafen.prototype.getVersion       = function() { return "1.0.5"; }
 afkDeafen.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 afkDeafen.prototype.load             = function() {}
@@ -193,7 +193,7 @@ afkDeafen.prototype.getOptionsPlugin = function(){
 				option.min = (option.min === undefined) ? 0 : option.min;
 				option.max = (option.max === undefined) ? 100 : option.max;
 				option.step = (option.step === undefined || option.step == 0) ? 1 : option.step;
-				option.percent = (option.percent === undefined) ? true : option.percent;
+				option.percent = (option.percent === undefined) ? false : option.percent;
 			}
 		});
 		
