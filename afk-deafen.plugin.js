@@ -5,7 +5,7 @@ function afkDeafen(){}
 
 afkDeafen.prototype.getName          = function() { return "AFK Auto-Deafen"; }
 afkDeafen.prototype.getDescription   = function() { return "Automatically deafens you when moving into an AFK channel.";  }
-afkDeafen.prototype.getVersion       = function() { return "1.0.1"; }
+afkDeafen.prototype.getVersion       = function() { return "1.0.2"; }
 afkDeafen.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 afkDeafen.prototype.load             = function() {}
@@ -250,7 +250,7 @@ afkDeafen.prototype.getOptionsPlugin  = function(){
 	OptionsPlugin.prototype.getAll         = function(){             // Get all options
 		return this.options;
 	};
-	OptionsPlugin.prototype.simpleOptions  = function(){             // Get options as a key=value object (used for localStorage)
+	OptionsPlugin.prototype.simpleOptions  = function(){             // Get options as a key=value object (used for bdPluginStorage)
 		var simpleoptions = {};
 		
 		$.each(this.options, function(key, option){
@@ -259,13 +259,13 @@ afkDeafen.prototype.getOptionsPlugin  = function(){
 		
 		return simpleoptions;
 	};
-	OptionsPlugin.prototype.save           = function(){             // Save options to localStorage
-		localStorage.setItem(this.storageKey, JSON.stringify(this.simpleOptions()));
+	OptionsPlugin.prototype.save           = function(){             // Save options to bdPluginStorage
+		bdPluginStorage.set(this.storageKey, JSON.stringify(this.simpleOptions()));
 	};
-	OptionsPlugin.prototype.load           = function(){             // Load options from localStorage
+	OptionsPlugin.prototype.load           = function(){             // Load options from bdPluginStorage
 		this.options = this._clone(this.defaults);
 		
-		var loaded = JSON.parse(localStorage.getItem(this.storageKey));
+		var loaded = JSON.parse(bdPluginStorage.get(this.storageKey));
 		if (!loaded) return;
 		
 		var self = this;

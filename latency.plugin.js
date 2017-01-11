@@ -5,7 +5,7 @@ function latencyDisplay(){}
 
 latencyDisplay.prototype.getName          = function() { return "Latency Display"; }
 latencyDisplay.prototype.getDescription   = function() { return "Displays live latency on the connection info button.";  }
-latencyDisplay.prototype.getVersion       = function() { return "1.0.0"; }
+latencyDisplay.prototype.getVersion       = function() { return "1.0.1"; }
 latencyDisplay.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 latencyDisplay.prototype.load             = function() {}
@@ -169,7 +169,7 @@ latencyDisplay.prototype.getOptionsPlugin  = function(){
 	OptionsPlugin.prototype.getAll         = function(){             // Get all options
 		return this.options;
 	};
-	OptionsPlugin.prototype.simpleOptions  = function(){             // Get options as a key=value object (used for localStorage)
+	OptionsPlugin.prototype.simpleOptions  = function(){             // Get options as a key=value object (used for bdPluginStorage)
 		var simpleoptions = {};
 		
 		$.each(this.options, function(key, option){
@@ -178,13 +178,13 @@ latencyDisplay.prototype.getOptionsPlugin  = function(){
 		
 		return simpleoptions;
 	};
-	OptionsPlugin.prototype.save           = function(){             // Save options to localStorage
-		localStorage.setItem(this.storageKey, JSON.stringify(this.simpleOptions()));
+	OptionsPlugin.prototype.save           = function(){             // Save options to bdPluginStorage
+		bdPluginStorage.set(this.storageKey, JSON.stringify(this.simpleOptions()));
 	};
-	OptionsPlugin.prototype.load           = function(){             // Load options from localStorage
+	OptionsPlugin.prototype.load           = function(){             // Load options from bdPluginStorage
 		this.options = this._clone(this.defaults);
 		
-		var loaded = JSON.parse(localStorage.getItem(this.storageKey));
+		var loaded = JSON.parse(bdPluginStorage.get(this.storageKey));
 		if (!loaded) return;
 		
 		var self = this;

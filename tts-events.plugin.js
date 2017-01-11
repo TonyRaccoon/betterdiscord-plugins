@@ -5,7 +5,7 @@ function ttsEvents(){}
 
 ttsEvents.prototype.getName          = function() { return "TTS Events"; }
 ttsEvents.prototype.getDescription   = function() { return "Plays text-to-speech messages on events such as users joining.";  }
-ttsEvents.prototype.getVersion       = function() { return "1.0.1"; }
+ttsEvents.prototype.getVersion       = function() { return "1.0.2"; }
 ttsEvents.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 ttsEvents.prototype.load             = function() {}
@@ -336,7 +336,7 @@ ttsEvents.prototype.getOptionsPlugin = function(){
 	OptionsPlugin.prototype.getAll         = function(){             // Get all options
 		return this.options;
 	};
-	OptionsPlugin.prototype.simpleOptions  = function(){             // Get options as a key=value object (used for localStorage)
+	OptionsPlugin.prototype.simpleOptions  = function(){             // Get options as a key=value object (used for bdPluginStorage)
 		var simpleoptions = {};
 		
 		$.each(this.options, function(key, option){
@@ -345,13 +345,13 @@ ttsEvents.prototype.getOptionsPlugin = function(){
 		
 		return simpleoptions;
 	};
-	OptionsPlugin.prototype.save           = function(){             // Save options to localStorage
-		localStorage.setItem(this.storageKey, JSON.stringify(this.simpleOptions()));
+	OptionsPlugin.prototype.save           = function(){             // Save options to bdPluginStorage
+		bdPluginStorage.set(this.storageKey, JSON.stringify(this.simpleOptions()));
 	};
-	OptionsPlugin.prototype.load           = function(){             // Load options from localStorage
+	OptionsPlugin.prototype.load           = function(){             // Load options from bdPluginStorage
 		this.options = this._clone(this.defaults);
 		
-		var loaded = JSON.parse(localStorage.getItem(this.storageKey));
+		var loaded = JSON.parse(bdPluginStorage.get(this.storageKey));
 		if (!loaded) return;
 		
 		var self = this;
