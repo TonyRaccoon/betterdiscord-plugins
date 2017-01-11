@@ -5,7 +5,7 @@ function latencyDisplay(){}
 
 latencyDisplay.prototype.getName          = function() { return "Latency Display"; }
 latencyDisplay.prototype.getDescription   = function() { return "Displays live latency on the connection info button.";  }
-latencyDisplay.prototype.getVersion       = function() { return "1.0.1"; }
+latencyDisplay.prototype.getVersion       = function() { return "1.0.2"; }
 latencyDisplay.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 latencyDisplay.prototype.load             = function() {}
@@ -26,7 +26,7 @@ latencyDisplay.prototype.start = function() {
 	var OptionsPlugin = this.getOptionsPlugin();
 	this.options = new OptionsPlugin({
 		plugin:      this,
-		storageKey:  "latencydisplay-options",
+		storageKey:  "latency",
 		defaults:    {
 			address:       {value:"google.com", type:"text",   label:"Address to ping"},
 			port:          {value:80,           type:"number", label:"Port to ping"},
@@ -103,7 +103,7 @@ latencyDisplay.prototype.clearPing = function() {
 
 // Tony's OptionsPlugin Helper /////////////////////////////////////
 // https://github.com/tony311/betterdiscord-optionshelper //////////
-latencyDisplay.prototype.getOptionsPlugin  = function(){
+latencyDisplay.prototype.getOptionsPlugin = function(){
 	var OptionsPlugin                      = function(params){       // Constructor
 		params.defaults = params.defaults || {};
 		
@@ -179,20 +179,18 @@ latencyDisplay.prototype.getOptionsPlugin  = function(){
 		return simpleoptions;
 	};
 	OptionsPlugin.prototype.save           = function(){             // Save options to bdPluginStorage
-		bdPluginStorage.set(this.storageKey, JSON.stringify(this.simpleOptions()));
+		var self = this;
+		$.each(this.simpleOptions(), function(key, value){
+			bdPluginStorage.set(self.storageKey, key, value);
+		});
 	};
 	OptionsPlugin.prototype.load           = function(){             // Load options from bdPluginStorage
 		this.options = this._clone(this.defaults);
 		
-		var loaded = JSON.parse(bdPluginStorage.get(this.storageKey));
-		if (!loaded) return;
-		
 		var self = this;
-		$.each(loaded, function(key,value){
-			if (value) {
-				if (self.options[key])
-					self.options[key].value = value;
-			}
+		$.each(this.options, function(key, option){
+			if (self.options[key])
+				self.options[key].value = bdPluginStorage.get(self.storageKey, key);
 		});
 	};
 	OptionsPlugin.prototype.reset          = function(){             // Reset options to defaults

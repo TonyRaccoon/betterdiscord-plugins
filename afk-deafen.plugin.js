@@ -5,7 +5,7 @@ function afkDeafen(){}
 
 afkDeafen.prototype.getName          = function() { return "AFK Auto-Deafen"; }
 afkDeafen.prototype.getDescription   = function() { return "Automatically deafens you when moving into an AFK channel.";  }
-afkDeafen.prototype.getVersion       = function() { return "1.0.2"; }
+afkDeafen.prototype.getVersion       = function() { return "1.0.3"; }
 afkDeafen.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 afkDeafen.prototype.load             = function() {}
@@ -21,7 +21,7 @@ afkDeafen.prototype.start = function() {
 	var OptionsPlugin = this.getOptionsPlugin();
 	this.options = new OptionsPlugin({
 		plugin:      this,
-		storageKey:"afkdeafen-options",
+		storageKey:"afk-deafen",
 		defaults:{
 			afkchannels: {value:"AFK", type:"text", label:"Channels to auto-deafen in", help:"Separate channel names with commas"},
 		}
@@ -184,7 +184,7 @@ afkDeafen.prototype.isAFKChannel = function(channel) {
 
 // Tony's OptionsPlugin Helper /////////////////////////////////////
 // https://github.com/tony311/betterdiscord-optionshelper //////////
-afkDeafen.prototype.getOptionsPlugin  = function(){
+afkDeafen.prototype.getOptionsPlugin = function(){
 	var OptionsPlugin                      = function(params){       // Constructor
 		params.defaults = params.defaults || {};
 		
@@ -260,20 +260,18 @@ afkDeafen.prototype.getOptionsPlugin  = function(){
 		return simpleoptions;
 	};
 	OptionsPlugin.prototype.save           = function(){             // Save options to bdPluginStorage
-		bdPluginStorage.set(this.storageKey, JSON.stringify(this.simpleOptions()));
+		var self = this;
+		$.each(this.simpleOptions(), function(key, value){
+			bdPluginStorage.set(self.storageKey, key, value);
+		});
 	};
 	OptionsPlugin.prototype.load           = function(){             // Load options from bdPluginStorage
 		this.options = this._clone(this.defaults);
 		
-		var loaded = JSON.parse(bdPluginStorage.get(this.storageKey));
-		if (!loaded) return;
-		
 		var self = this;
-		$.each(loaded, function(key,value){
-			if (value) {
-				if (self.options[key])
-					self.options[key].value = value;
-			}
+		$.each(this.options, function(key, option){
+			if (self.options[key])
+				self.options[key].value = bdPluginStorage.get(self.storageKey, key);
 		});
 	};
 	OptionsPlugin.prototype.reset          = function(){             // Reset options to defaults
