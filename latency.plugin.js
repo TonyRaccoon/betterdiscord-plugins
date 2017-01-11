@@ -5,7 +5,7 @@ function latencyDisplay(){}
 
 latencyDisplay.prototype.getName          = function() { return "Latency Display"; }
 latencyDisplay.prototype.getDescription   = function() { return "Displays live latency on the connection info button.";  }
-latencyDisplay.prototype.getVersion       = function() { return "1.0.4"; }
+latencyDisplay.prototype.getVersion       = function() { return "1.0.5"; }
 latencyDisplay.prototype.getAuthor        = function() { return "TonyLemur"; }
 
 latencyDisplay.prototype.load             = function() {}
@@ -42,10 +42,13 @@ latencyDisplay.prototype.start = function() {
 			if (key == "port" && (value<1 || value>65535))
 				self.options.set("port", 80);
 			
-			self.doPing();
+			clearInterval(self.intervalPing);
+			self.intervalPing = setInterval(function(){ self.doPing() }, self.options.get("rate")*1000);
 		},
 		
 		onReset:function(){
+			clearInterval(self.intervalPing);
+			self.intervalPing = setInterval(function(){ self.doPing() }, self.options.get("rate")*1000);
 			self.doPing();
 		},
 	});
